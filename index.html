@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Factsack Search</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: white;
+  color: #202124;
+  transition: 0.3s;
+}
+
+body.dark {
+  background: #121212;
+  color: #f1f1f1;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 25px;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #4285f4;
+}
+
+.dark-btn {
+  border: none;
+  background: #f1f3f4;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  font-size: 20px;
+}
+
+body.dark .dark-btn {
+  background: #292929;
+  color: white;
+}
+
+main {
+  max-width: 850px;
+  margin: 55px auto;
+  padding: 0 20px;
+}
+
+.hero {
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+body.dark .hero p {
+  color: #aaa;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid #dfe1e5;
+  border-radius: 30px;
+  padding: 5px 8px 5px 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  background: white;
+}
+
+body.dark .search-box {
+  background: #1e1e1e;
+  border-color: #444;
+}
+
+.search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 17px;
+  padding: 13px 8px;
+  background: transparent;
+  color: inherit;
+}
+
+.search-box button {
+  border: none;
+  background: #4285f4;
+  color: white;
+  border-radius: 24px;
+  padding: 12px 22px;
+  font-weight: bold;
+}
+
+.chips {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.chip {
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 20px;
+  padding: 9px 15px;
+}
+
+body.dark .chip {
+  background: #1e1e1e;
+  border-color: #444;
+  color: white;
+}
+
+.results {
+  margin-top: 40px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.ai-card {
+  background: #f5f8ff;
+  border: 1px solid #d8e4ff;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+body.dark .ai-card {
+  background: #19233a;
+  border-color: #30476f;
+}
+
+.ai-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.result-card {
+  border-bottom: 1px solid #ddd;
+  padding: 20px 0;
+}
+
+body.dark .result-card {
+  border-color: #333;
+}
+
+.result-card h3 {
+  margin: 0 0 8px;
+  color: #1a73e8;
+}
+
+.result-card a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.result-card p {
+  line-height: 1.5;
+  color: #555;
+}
+
+body.dark .result-card p {
+  color: #bbb;
+}
+
+.loading {
+  text-align: center;
+  padding: 25px;
+  color: #777;
+}
+
+.error {
+  background: #fff0f0;
+  color: #b00020;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+body.dark .error {
+  background: #351b1b;
+  color: #ff9b9b;
+}
+
+footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: #888;
+}
+
+@media (max-width: 600px) {
+  .hero h1 {
+    font-size: 38px;
+  }
+
+  main {
+    margin-top: 30px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">Factsack</div>
+
+  <button class="dark-btn" onclick="toggleDarkMode()">
+    🌙
+  </button>
+</header>
+
+<main>
+
+<section class="hero">
+
+  <h1>Factsack</h1>
+
+  <p>Search the web. Ask AI. Discover facts.</p>
+
+  <div class="search-box">
+
+    <input
+      id="searchInput"
+      type="text"
+      placeholder="Search anything..."
+    >
+
+    <button onclick="searchFactsack()">
+      Search
+    </button>
+
+  </div>
+
+  <div class="chips">
+
+    <button class="chip" onclick="quickSearch('Ghana')">
+      🇬🇭 Ghana
+    </button>
+
+    <button class="chip" onclick="quickSearch('Science')">
+      🔬 Science
+    </button>
+
+    <button class="chip" onclick="quickSearch('Space')">
+      🚀 Space
+    </button>
+
+    <button class="chip" onclick="quickSearch('History')">
+      📜 History
+    </button>
+
+  </div>
+
+</section>
+
+<section class="results" id="results"></section>
+
+</main>
+
+<footer>
+Factsack © 2026
+</footer>
+
+
+<script>
+
+/* CLOUDFLARE AI WORKER */
+const AI_API_URL =
+"https://factsack-ai.dezzyosei14.workers.dev/";
+
+
+/* ENTER KEY SEARCH */
+document.getElementById("searchInput")
+.addEventListener("keydown", function(event) {
+
+  if (event.key === "Enter") {
+    searchFactsack();
+  }
+
+});
+
+
+/* MAIN SEARCH */
+async function searchFactsack() {
+
+  const query =
+    document.getElementById("searchInput")
+    .value.trim();
+
+  const results =
+    document.getElementById("results");
+
+  if (!query) return;
+
+  results.innerHTML = `
+    <div class="loading">
+      🔎 Searching Factsack...
+    </div>
+  `;
+
+  try {
+
+    const [aiAnswer, wikiResults] =
+      await Promise.all([
+        getAIAnswer(query),
+        getWikipediaResults(query)
+      ]);
+
+
+    let html = `
+
+      <div class="ai-card">
+
+        <div class="ai-title">
+          🤖 Factsack AI
+        </div>
+
+        <div>
+          ${escapeHTML(aiAnswer)}
+        </div>
+
+      </div>
+
+      <div class="section-title">
+        📚 Wikipedia Results
+      </div>
+
+    `;
+
+
+    if (wikiResults.length === 0) {
+
+      html += `
+        <div class="loading">
+          No Wikipedia results found.
+        </div>
+      `;
+
+    } else {
+
+      wikiResults.forEach(result => {
+
+        html += `
+
+          <div class="result-card">
+
+            <h3>
+              <a
+                href="${result.url}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ${escapeHTML(result.title)}
+              </a>
+            </h3>
+
+            <p>
+              ${escapeHTML(result.snippet)}
+            </p>
+
+          </div>
+
+        `;
+
+      });
+
+    }
+
+    results.innerHTML = html;
+
+  } catch (error) {
+
+    console.error(error);
+
+    results.innerHTML = `
+
+      <div class="error">
+
+        ❌ Factsack couldn't complete the search.
+
+        <br><br>
+
+        Please try again.
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* AI REQUEST */
+async function getAIAnswer(query) {
+
+  const response =
+    await fetch(AI_API_URL, {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        query: query
+      })
+
+    });
+
+
+  const data =
+    await response.json();
+
+
+  if (!response.ok) {
+
+    throw new Error(
+      data.error || "AI request failed"
+    );
+
+  }
+
+
+  return data.answer ||
+    "No AI answer was generated.";
+
+}
+
+
+/* WIKIPEDIA SEARCH */
+async function getWikipediaResults(query) {
+
+  const url =
+    "https://en.wikipedia.org/w/api.php" +
+    "?action=query" +
+    "&list=search" +
+    "&srsearch=" +
+    encodeURIComponent(query) +
+    "&format=json" +
+    "&origin=*";
+
+
+  const response =
+    await fetch(url);
+
+
+  if (!response.ok) {
+    throw new Error("Wikipedia request failed");
+  }
+
+
+  const data =
+    await response.json();
+
+
+  return data.query.search.map(item => {
+
+    return {
+
+      title: item.title,
+
+      snippet:
+        item.snippet
+        .replace(/<[^>]*>/g, ""),
+
+      url:
+        "https://en.wikipedia.org/wiki/" +
+        encodeURIComponent(
+          item.title.replace(/ /g, "_")
+        )
+
+    };
+
+  });
+
+}
+
+
+/* QUICK SEARCH */
+function quickSearch(query) {
+
+  document.getElementById("searchInput")
+    .value = query;
+
+  searchFactsack();
+
+}
+
+
+/* DARK MODE */
+function toggleDarkMode() {
+
+  document.body.classList.toggle("dark");
+
+}
+
+
+/* SECURITY */
+function escapeHTML(text) {
+
+  const div =
+    document.createElement("div");
+
+  div.textContent = text;
+
+  return div.innerHTML;
+
+}
+
+</script>
+
+</body>
+  </html>
