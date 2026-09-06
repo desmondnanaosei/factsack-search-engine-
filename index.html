@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Factsack - Search for Knowledge</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 50px;
+      margin-bottom: 10px;
+    }
+
+    .tagline {
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    .search-box {
+      display: flex;
+      justify-content: center;
+    }
+
+    input {
+      width: 70%;
+      padding: 15px;
+      font-size: 17px;
+      border: 1px solid #ccc;
+      border-radius: 25px 0 0 25px;
+      outline: none;
+    }
+
+    button {
+      padding: 15px 25px;
+      border: none;
+      border-radius: 0 25px 25px 0;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    #results {
+      margin-top: 40px;
+      text-align: left;
+    }
+
+    .result {
+      background: white;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+    }
+
+    .result a {
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .result p {
+      color: #444;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>Factsack 🔎</h1>
+
+    <p class="tagline">
+      Search for facts and information
+    </p>
+
+    <div class="search-box">
+
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search Factsack..."
+      >
+
+      <button onclick="searchFactsack()">
+        Search
+      </button>
+
+    </div>
+
+    <div id="results"></div>
+
+  </div>
+
+  <script>
+
+    async function searchFactsack() {
+
+      const query =
+        document.getElementById("searchInput").value.trim();
+
+      const results =
+        document.getElementById("results");
+
+      if (!query) {
+        results.innerHTML =
+          "<p>Please enter something to search.</p>";
+        return;
+      }
+
+      results.innerHTML =
+        "<p>🔎 Searching...</p>";
+
+      try {
+
+        const url =
+          "https://en.wikipedia.org/w/api.php?" +
+          "action=query" +
+          "&list=search" +
+          "&srsearch=" +
+          encodeURIComponent(query) +
+          "&format=json" +
+          "&origin=*";
+
+        const response =
+          await fetch(url);
+
+        const data =
+          await response.json();
+
+        const searches =
+          data.query.search;
+
+        if (searches.length === 0) {
+
+          results.innerHTML =
+            "<p>No results found.</p>";
+
+          return;
+        }
+
+        results.innerHTML =
+          "<h2>Results for: " +
+          query +
+          "</h2>";
+
+        searches.forEach(function(item) {
+
+          const title =
+            item.title;
+
+          const snippet =
+            item.snippet
+              .replace(/<[^>]*>/g, "");
+
+          const link =
+            "https://en.wikipedia.org/wiki/" +
+            encodeURIComponent(
+              title.replace(/ /g, "_")
+            );
+
+          results.innerHTML +=
+
+            "<div class='result'>" +
+
+            "<a href='" +
+            link +
+            "' target='_blank'>" +
+            title +
+            "</a>" +
+
+            "<p>" +
+            snippet +
+            "</p>" +
+
+            "</div>";
+
+        });
+
+      } catch (error) {
+
+        console.error(error);
+
+        results.innerHTML =
+          "<p>❌ Search failed. Please try again.</p>";
+
+      }
+
+    }
+
+    document
+      .getElementById("searchInput")
+      .addEventListener("keypress", function(event) {
+
+        if (event.key === "Enter") {
+          searchFactsack();
+        }
+
+      });
+
+  </script>
+
+</body>
+  </html>
