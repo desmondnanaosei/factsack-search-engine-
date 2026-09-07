@@ -550,8 +550,58 @@ function searchFactsack(question){
 results.innerHTML =
 "<p style='text-align:center;color:#9ba4b5;'>🔎 Searching Factsack...</p>";
 
-
 var url =
 "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=" +
 encodeURIComponent(question) +
-"&
+"&format=json&origin=*";
+
+fetch(url)
+
+.then(function(response){
+return response.json();
+})
+
+.then(function(data){
+
+results.innerHTML = "";
+
+if(!data.query || data.query.search.length === 0){
+
+results.innerHTML =
+"<p style='text-align:center;'>No results found.</p>";
+
+return;
+
+}
+
+data.query.search.forEach(function(item){
+
+var result = document.createElement("div");
+
+result.className = "result";
+
+result.innerHTML =
+"<h2>" + item.title + "</h2>" +
+"<p>" +
+item.snippet.replace(/<[^>]*>/g, "") +
+"</p>";
+
+results.appendChild(result);
+
+});
+
+})
+
+.catch(function(){
+
+results.innerHTML =
+"<p style='text-align:center;'>Search failed. Check your internet connection.</p>";
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
