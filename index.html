@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Factsack AI</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #212121;
+      color: white;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 260px;
+      height: 100vh;
+      background: #171717;
+      position: fixed;
+      left: 0;
+      top: 0;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: bold;
+      padding: 15px 10px;
+      margin-bottom: 15px;
+    }
+
+    .new-chat {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #303030;
+      color: white;
+      cursor: pointer;
+      font-size: 15px;
+      text-align: left;
+    }
+
+    .new-chat:hover {
+      background: #3d3d3d;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      color: #aaa;
+      font-size: 14px;
+      padding: 10px;
+    }
+
+    .main {
+      margin-left: 260px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      height: 60px;
+      display: flex;
+      align-items: center;
+      padding: 0 25px;
+      font-size: 18px;
+      font-weight: bold;
+      border-bottom: 1px solid #333;
+    }
+
+    .chat-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 30px 15%;
+      padding-bottom: 120px;
+    }
+
+    .welcome {
+      text-align: center;
+      margin-top: 120px;
+    }
+
+    .welcome h1 {
+      font-size: 38px;
+      margin-bottom: 12px;
+    }
+
+    .welcome p {
+      color: #aaa;
+      font-size: 17px;
+    }
+
+    .message-row {
+      display: flex;
+      margin: 20px 0;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 14px 18px;
+      line-height: 1.5;
+      border-radius: 12px;
+      white-space: pre-wrap;
+    }
+
+    .user-message {
+      background: #303030;
+      margin-left: auto;
+    }
+
+    .ai-message {
+      background: transparent;
+      border: 1px solid #333;
+    }
+
+    .input-area {
+      position: fixed;
+      bottom: 0;
+      left: 260px;
+      right: 0;
+      background: #212121;
+      padding: 20px 15%;
+    }
+
+    .input-box {
+      display: flex;
+      background: #303030;
+      border-radius: 15px;
+      padding: 8px;
+      align-items: center;
+    }
+
+    #userInput {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: white;
+      padding: 12px;
+      font-size: 16px;
+    }
+
+    #sendButton {
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 10px;
+      background: white;
+      color: black;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 700px) {
+      .sidebar {
+        width: 70px;
+        padding: 10px;
+      }
+
+      .logo {
+        font-size: 0;
+      }
+
+      .logo::after {
+        content: "👑";
+        font-size: 28px;
+      }
+
+      .new-chat {
+        font-size: 0;
+        text-align: center;
+      }
+
+      .new-chat::after {
+        content: "+";
+        font-size: 25px;
+      }
+
+      .sidebar-bottom {
+        display: none;
+      }
+
+      .main {
+        margin-left: 70px;
+      }
+
+      .input-area {
+        left: 70px;
+        padding: 15px;
+      }
+
+      .chat-container {
+        padding: 20px;
+      }
+
+      .welcome {
+        margin-top: 100px;
+      }
+
+      .welcome h1 {
+        font-size: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="sidebar">
+    <div class="logo">👑 Factsack AI</div>
+
+    <button class="new-chat" onclick="newChat()">
+      + New Chat
+    </button>
+
+    <div class="sidebar-bottom">
+      Factsack AI v1.0
+    </div>
+  </div>
+
+  <div class="main">
+
+    <div class="topbar">
+      Factsack AI
+    </div>
+
+    <div class="chat-container" id="chat">
+
+      <div class="welcome" id="welcome">
+        <h1>How can I help you?</h1>
+        <p>Ask Factsack AI anything.</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="input-area">
+
+    <div class="input-box">
+
+      <input
+        type="text"
+        id="userInput"
+        placeholder="Ask Factsack AI..."
+      >
+
+      <button id="sendButton" onclick="sendMessage()">
+        ↑
+      </button>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    const WORKER_URL =
+      "https://factsack-ai.dezzyosei14.workers.dev/";
+
+    async function sendMessage() {
+
+      const input = document.getElementById("userInput");
+      const chat = document.getElementById("chat");
+      const welcome = document.getElementById("welcome");
+
+      const message = input.value.trim();
+
+      if (message === "") return;
+
+      welcome.style.display = "none";
+
+      const userRow = document.createElement("div");
+      userRow.className = "message-row";
+
+      const userMessage = document.createElement("div");
+      userMessage.className = "message user-message";
+      userMessage.textContent = message;
+
+      userRow.appendChild(userMessage);
+      chat.appendChild(userRow);
+
+      input.value = "";
+
+      const aiRow = document.createElement("div");
+      aiRow.className = "message-row";
+
+      const aiMessage = document.createElement("div");
+      aiMessage.className = "message ai-message";
+      aiMessage.textContent = "🤖 Factsack AI is thinking...";
+
+      aiRow.appendChild(aiMessage);
+      chat.appendChild(aiRow);
+
+      chat.scrollTop = chat.scrollHeight;
+
+      try {
+
+        const response = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            question: message
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.answer) {
+          aiMessage.textContent = "🤖 " + data.answer;
+        } else if (data.error) {
+          aiMessage.textContent = "⚠️ " + data.error;
+        } else {
+          aiMessage.textContent = "⚠️ Factsack AI received an unexpected response.";
+        }
+
+      } catch (error) {
+
+        aiMessage.textContent =
+          "⚠️ I couldn't connect to the Factsack AI Worker.";
+
+        console.error(error);
+      }
+
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    document
+      .getElementById("userInput")
+      .addEventListener("keypress", function(event) {
+
+        if (event.key === "Enter") {
+          sendMessage();
+        }
+
+      });
+
+    function newChat() {
+
+      const chat = document.getElementById("chat");
+
+      chat.innerHTML = `
+        <div class="welcome" id="welcome">
+          <h1>How can I help you?</h1>
+          <p>Ask Factsack AI anything.</p>
+        </div>
+      `;
+
+    }
+
+  </script>
+
+</body>
+  </html>
