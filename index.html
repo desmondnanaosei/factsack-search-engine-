@@ -548,24 +548,80 @@
 
     }
 
+async function aiMode(query) {
 
-    function aiMode(query) {
+  results.innerHTML = `
+    <div class="result user-question">
+      <h2>You</h2>
+      <p>${escapeHTML(query)}</p>
+    </div>
 
-      results.innerHTML = `
+    <div class="result ai-answer">
+      <h2>🤖 Factsack AI</h2>
+      <p>Finding your answer...</p>
+    </div>
+  `;
 
-        <div class="result user-question">
-          <h2>You</h2>
-          <p>${escapeHTML(query)}</p>
-        </div>
+  try {
 
-        <div class="result ai-answer">
-          <h2>🤖 Factsack AI</h2>
-          <p id="aiText">
-            Thinking...
-          </p>
-        </div>
+    const url =
+      "https://en.wikipedia.org/w/api.php" +
+      "?action=query" +
+      "&list=search" +
+      "&srsearch=" + encodeURIComponent(query) +
+      "&srlimit=1" +
+      "&format=json" +
+      "&origin=*";
 
-      `;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (!data.query || !data.query.search.length) {
+      document.querySelector(".ai-answer p").textContent =
+        "Sorry, I couldn't find a direct answer for that.";
+      return;
+    }
+
+    const title = data.query.search[0].title;
+
+    const summaryUrl =
+      "https://en.wikipedia.org/api/rest_v1/page/summary/" +
+      encodeURIComponent(title);
+
+    const summaryResponse = await fetch(summaryUrl);
+    const summaryData = await summaryResponse.json();
+
+    const answer =
+      summaryData.extract ||
+      "Sorry, I couldn't find a clear answer.";
+
+    document.querySelector(".ai-answer p").textContent = answer;
+
+  } catch (error) {
+
+    document.querySelector(".ai-answer p").textContent =
+      "Factsack couldn't find an answer right now. Please check your internet connection and try again.";
+
+  }
+
+
+    
+
+      
+
+      
+      
+        
+        
+
+        
+    
+        
+            
+          
+        
+
+      
 
 
       setTimeout(function() {
