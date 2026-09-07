@@ -433,19 +433,44 @@
       search();
 
     }
+function selectTab(element){
+  document.querySelectorAll(".tab").forEach(tab=>{
+    tab.classList.remove("active");
+  });
 
+  element.classList.add("active");
 
-    function selectTab(element) {
-
-      document
-        .querySelectorAll(".tab")
-        .forEach(tab => {
-          tab.classList.remove("active");
-        });
-
-      element.classList.add("active");
-
+  if(element.innerText.includes("AI Mode")){
+    results.innerHTML = `
+      <div class="result">
+        <h2>🤖 Factsack AI Mode</h2>
+        <p>Ask Factsack anything and AI Mode will answer here.</p>
+      </div>
+    `;
+  } else {
+    results.innerHTML = `
+      <div class="status">
+        Search Factsack to get started.
+      </div>
+    `;
+  }
     }
+
+
+
+      
+        
+        
+        
+    
+  
+    
+
+    
+
+    
+
+    
 
 
     async function search() {
