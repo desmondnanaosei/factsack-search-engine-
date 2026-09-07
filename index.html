@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Factsack</title>
+
+<style>
+body{
+background:#090e16;
+color:white;
+font-family:Arial,sans-serif;
+margin:0;
+padding:0;
+}
+
+header{
+padding:20px;
+font-size:26px;
+font-weight:bold;
+}
+
+main{
+text-align:center;
+padding:20px;
+}
+
+.crown{
+font-size:60px;
+margin-top:20px;
+}
+
+h1{
+font-size:52px;
+margin:10px;
+}
+
+.subtitle{
+color:#9ba4b5;
+font-size:21px;
+}
+
+.searchbox{
+display:flex;
+max-width:650px;
+margin:40px auto 20px;
+background:#151d2a;
+border:1px solid #344055;
+border-radius:25px;
+padding:8px;
+}
+
+input{
+flex:1;
+background:transparent;
+border:none;
+outline:none;
+color:white;
+font-size:18px;
+padding:15px;
+min-width:0;
+}
+
+button{
+cursor:pointer;
+}
+
+#searchButton{
+background:#6577df;
+color:white;
+border:none;
+border-radius:18px;
+padding:15px 22px;
+font-size:17px;
+font-weight:bold;
+}
+
+.tabs{
+margin:25px auto;
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:12px;
+}
+
+.tab{
+background:#151d2a;
+color:white;
+border:1px solid #344055;
+border-radius:28px;
+padding:15px 22px;
+font-size:17px;
+}
+
+.active{
+border-color:#7184ff;
+background:#242d45;
+}
+
+#suggestions{
+margin-top:25px;
+}
+
+.suggestion{
+background:#151d2a;
+color:#d0d5df;
+border:1px solid #344055;
+border-radius:25px;
+padding:13px 18px;
+margin:5px;
+font-size:16px;
+}
+
+#results{
+max-width:750px;
+margin:40px auto;
+text-align:left;
+}
+
+.message{
+padding:20px;
+margin:15px;
+border-radius:20px;
+line-height:1.7;
+font-size:18px;
+}
+
+.user{
+background:#303b56;
+margin-left:20%;
+}
+
+.ai{
+background:#151d2a;
+border:1px solid #344055;
+margin-right:10%;
+}
+
+.result{
+background:#151d2a;
+border:1px solid #344055;
+border-radius:18px;
+padding:20px;
+margin:15px;
+}
+
+.result p{
+color:#c7cdd7;
+line-height:1.6;
+}
+
+@media(max-width:600px){
+
+h1{
+font-size:43px;
+}
+
+.user{
+margin-left:10%;
+}
+
+.ai{
+margin-right:5%;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+👑 Factsack
+</header>
+
+<main>
+
+<div class="crown">👑</div>
+
+<h1>Factsack</h1>
+
+<div class="subtitle">
+Search. Ask. Discover.
+</div>
+
+
+<div class="searchbox">
+
+<input
+id="searchInput"
+placeholder="Search or ask anything..."
+>
+
+<button id="searchButton">
+Search
+</button>
+
+</div>
+
+
+<div class="tabs">
+
+<button class="tab active" id="allButton">
+🔎 All
+</button>
+
+<button class="tab" id="aiButton">
+🤖 AI Mode
+</button>
+
+<button class="tab">
+🖼️ Images
+</button>
+
+<button class="tab">
+📰 News
+</button>
+
+<button class="tab">
+🎥 Videos
+</button>
+
+</div>
+
+
+<div id="suggestions">
+
+<p>Try asking:</p>
+
+<button class="suggestion" id="hiButton">
+👋 Hi
+</button>
+
+<button class="suggestion" id="howButton">
+😊 How are you?
+</button>
+
+<button class="suggestion" id="foodButton">
+🍛 What should I eat?
+</button>
+
+<button class="suggestion" id="photoButton">
+🌱 Photosynthesis
+</button>
+
+</div>
+
+
+<div id="results">
+
+<p style="text-align:center;color:#9ba4b5;">
+Search Factsack to get started.
+</p>
+
+</div>
+
+</main>
+
+
+<script>
+
+var mode = "all";
+
+var input = document.getElementById("searchInput");
+
+var results = document.getElementById("results");
+
+var searchButton = document.getElementById("searchButton");
+
+var aiButton = document.getElementById("aiButton");
+
+var allButton = document.getElementById("allButton");
+
+
+/* AI MODE BUTTON */
+
+aiButton.onclick = function(){
+
+mode = "ai";
+
+aiButton.classList.add("active");
+
+allButton.classList.remove("active");
+
+searchButton.innerHTML = "Ask";
+
+input.placeholder = "Message Factsack AI...";
+
+results.innerHTML =
+"<div class='message ai'><b>🤖 Factsack AI</b><br><br>Hey! 👋 What's up? You can chat with me or ask me anything!</div>";
+
+};
+
+
+/* ALL BUTTON */
+
+allButton.onclick = function(){
+
+mode = "all";
+
+allButton.classList.add("active");
+
+aiButton.classList.remove("active");
+
+searchButton.innerHTML = "Search";
+
+input.placeholder = "Search Factsack...";
+
+results.innerHTML =
+"<p style='text-align:center;color:#9ba4b5;'>Search Factsack to get started.</p>";
+
+};
+
+
+/* SEARCH BUTTON */
+
+searchButton.onclick = function(){
+
+var question = input.value.trim();
+
+if(question === ""){
+
+alert("Type something first!");
+
+return;
+
+}
+
+if(mode === "ai"){
+
+answerAI(question);
+
+}
+
+else{
+
+searchFactsack(question);
+
+}
+
+input.value = "";
+
+};
+
+
+/* ENTER */
+
+input.onkeydown = function(event){
+
+if(event.key === "Enter"){
+
+searchButton.click();
+
+}
+
+};
+
+
+/* SUGGESTION BUTTONS */
+
+document.getElementById("hiButton").onclick = function(){
+
+mode = "ai";
+
+aiButton.click();
+
+input.value = "Hi";
+
+searchButton.click();
+
+};
+
+
+document.getElementById("howButton").onclick = function(){
+
+mode = "ai";
+
+aiButton.click();
+
+input.value = "How are you?";
+
+searchButton.click();
+
+};
+
+
+document.getElementById("foodButton").onclick = function(){
+
+mode = "ai";
+
+aiButton.click();
+
+input.value = "What should I eat today?";
+
+searchButton.click();
+
+};
+
+
+document.getElementById("photoButton").onclick = function(){
+
+mode = "ai";
+
+aiButton.click();
+
+input.value = "What is photosynthesis?";
+
+searchButton.click();
+
+};
+
+
+/* AI ANSWERS */
+
+function answerAI(question){
+
+var q = question.toLowerCase();
+
+results.innerHTML +=
+"<div class='message user'><b>You</b><br><br>" +
+question +
+"</div>";
+
+
+var answer = "";
+
+
+if(
+q === "hi" ||
+q === "hello" ||
+q === "hey"
+){
+
+answer = "Hey! 👋 What's up? How are you doing today?";
+
+}
+
+
+else if(
+q.includes("how are you") ||
+q.includes("how r u") ||
+q.includes("hw r u")
+){
+
+answer = "I'm doing great! 😄 Thanks for asking! How are you doing today?";
+
+}
+
+
+else if(
+q === "wsp" ||
+q.includes("what's up") ||
+q.includes("whats up")
+){
+
+answer = "Not much 😄 I'm here talking with you! What's up with you?";
+
+}
+
+
+else if(
+q.includes("i am good") ||
+q.includes("im good") ||
+q.includes("i'm good")
+){
+
+answer = "That's great! 😄 Glad to hear that! What are you up to today?";
+
+}
+
+
+else if(
+q.includes("what should i eat") ||
+q.includes("what can i eat")
+){
+
+answer = "😋 You could try waakye, jollof rice, fried rice, or rice and chicken! What kind of food are you in the mood for?";
+
+}
+
+
+else if(
+q.includes("who created you") ||
+q.includes("who made you") ||
+q.includes("who created u") ||
+q.includes("who made u")
+){
+
+answer = "I was created by Desmond Nana Osei, a JHS graduate and developer. 👑";
+
+}
+
+
+else if(
+q.includes("your name") ||
+q === "who are you"
+){
+
+answer = "I'm Factsack AI 🤖! I'm part of the Factsack search engine. You can chat with me or ask me questions!";
+
+}
+
+
+else if(
+q === "thanks" ||
+q === "thank you" ||
+q === "tnx"
+){
+
+answer = "You're welcome! 😄 Anytime!";
+
+}
+
+
+else if(
+q.includes("photosynthesis")
+){
+
+answer = "Photosynthesis is the process by which plants use sunlight, water and carbon dioxide to make their own food. Oxygen is released during the process. 🌱";
+
+}
+
+
+else{
+
+answer = "That's an interesting question! Factsack is still growing, but I'm here to help you search and discover information. 🔎";
+
+}
+
+
+results.innerHTML +=
+"<div class='message ai'><b>🤖 Factsack AI</b><br><br>" +
+answer +
+"</div>";
+
+
+window.scrollTo(
+0,
+document.body.scrollHeight
+);
+
+}
+
+
+/* NORMAL SEARCH */
+
+function searchFactsack(question){
+
+results.innerHTML =
+"<p style='text-align:center;color:#9ba4b5;'>🔎 Searching Factsack...</p>";
+
+
+var url =
+"https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=" +
+encodeURIComponent(question) +
+"&
