@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Factsack 3.1</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #080b10;
+      color: white;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: 70px;
+      padding: 0 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .top-right {
+      color: #929baa;
+      font-size: 13px;
+    }
+
+    .main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 70px 20px 50px;
+      text-align: center;
+    }
+
+    .crown {
+      font-size: 55px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 58px;
+      letter-spacing: -3px;
+      margin-bottom: 12px;
+    }
+
+    .description {
+      color: #8993a3;
+      font-size: 16px;
+      margin-bottom: 35px;
+    }
+
+    .search-area {
+      max-width: 720px;
+      margin: auto;
+    }
+
+    .search-box {
+      min-height: 62px;
+      width: 100%;
+      background: #11161e;
+      border: 1px solid #293241;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      padding: 6px 7px 6px 20px;
+    }
+
+    .search-icon {
+      font-size: 20px;
+      margin-right: 12px;
+    }
+
+    #searchInput {
+      flex: 1;
+      height: 48px;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: white;
+      font-size: 16px;
+    }
+
+    #searchInput::placeholder {
+      color: #697586;
+    }
+
+    #searchButton {
+      height: 48px;
+      padding: 0 23px;
+      background: #6577ff;
+      border: none;
+      border-radius: 13px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .tabs {
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      padding: 10px 16px;
+      border: 1px solid #293241;
+      background: #11161e;
+      color: #9ca6b5;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .tab.active {
+      color: white;
+      border-color: #6577ff;
+      background: #182035;
+    }
+
+    .suggestions {
+      margin-top: 30px;
+      color: #657080;
+      font-size: 13px;
+    }
+
+    .suggestions span {
+      display: inline-block;
+      margin: 7px;
+      padding: 9px 13px;
+      border: 1px solid #202833;
+      border-radius: 15px;
+      cursor: pointer;
+    }
+
+    #results {
+      max-width: 800px;
+      margin: 50px auto;
+      text-align: left;
+    }
+
+    .result {
+      background: #11161e;
+      border: 1px solid #293241;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 15px;
+    }
+
+    .result h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .result p {
+      color: #c3cad4;
+      line-height: 1.7;
+    }
+
+    .source {
+      display: inline-block;
+      margin-top: 13px;
+      color: #8291ff;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .status {
+      text-align: center;
+      color: #697586;
+    }
+
+    .user-question {
+      background: #182035;
+      border: 1px solid #39446b;
+    }
+
+    .ai-answer {
+      border-color: #293241;
+    }
+
+    footer {
+      text-align: center;
+      color: #4d5663;
+      font-size: 12px;
+      padding: 30px 15px;
+      border-top: 1px solid #151b24;
+    }
+
+    @media (max-width: 600px) {
+      .main {
+        padding-top: 45px;
+      }
+
+      h1 {
+        font-size: 44px;
+      }
+
+      .crown {
+        font-size: 45px;
+      }
+
+      .top-right {
+        display: none;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .search-icon {
+        display: none;
+      }
+
+      .search-box {
+        padding-left: 12px;
+      }
+
+      #searchInput {
+        font-size: 14px;
+      }
+
+      #searchButton {
+        padding: 0 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="topbar">
+    <div class="brand">👑 Factsack</div>
+    <div class="top-right">Factsack 3.1</div>
+  </div>
+
+  <main class="main">
+
+    <div class="crown">👑</div>
+
+    <h1>Factsack</h1>
+
+    <p class="description">
+      Search. Ask. Discover.
+    </p>
+
+    <div class="search-area">
+
+      <div class="search-box">
+
+        <div class="search-icon">🔎</div>
+
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="Search or ask anything..."
+          autocomplete="off"
+        >
+
+        <button id="searchButton">
+          Search
+        </button>
+
+      </div>
+
+      <div class="tabs">
+
+        <div class="tab active" onclick="selectTab('all', this)">
+          🔎 All
+        </div>
+
+        <div class="tab" onclick="selectTab('ai', this)">
+          🤖 AI Mode
+        </div>
+
+        <div class="tab" onclick="selectTab('images', this)">
+          🖼️ Images
+        </div>
+
+        <div class="tab" onclick="selectTab('news', this)">
+          📰 News
+        </div>
+
+        <div class="tab" onclick="selectTab('videos', this)">
+          🎥 Videos
+        </div>
+
+      </div>
+
+      <div class="suggestions">
+        Try asking:
+        <span onclick="quickSearch('What is Ghana?')">What is Ghana?</span>
+        <span onclick="quickSearch('How does the internet work?')">How does the internet work?</span>
+        <span onclick="quickSearch('Solar system')">Solar system</span>
+      </div>
+
+    </div>
+
+    <div id="results">
+      <div class="status">
+        Search Factsack to get started.
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    Factsack 3.1 • Search. Ask. Discover.
+  </footer>
+
+
+  <script>
+
+    const input = document.getElementById("searchInput");
+    const button = document.getElementById("searchButton");
+    const results = document.getElementById("results");
+
+    let currentMode = "all";
+
+
+    button.addEventListener("click", search);
+
+    input.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        search();
+      }
+    });
+
+
+    function selectTab(mode, element) {
+
+      currentMode = mode;
+
+      document.querySelectorAll(".tab").forEach(tab => {
+        tab.classList.remove("active");
+      });
+
+      element.classList.add("active");
+
+
+      if (mode === "ai") {
+
+        input.placeholder = "Ask Factsack AI anything...";
+        button.textContent = "Ask";
+
+        results.innerHTML = `
+          <div class="result ai-answer">
+            <h2>🤖 Factsack AI Mode</h2>
+            <p>
+              Ask me anything! I'll try to help you find
+              a useful answer.
+            </p>
+          </div>
+        `;
+
+      } else if (mode === "images") {
+
+        input.placeholder = "Search for images...";
+        button.textContent = "Search";
+
+        results.innerHTML = `
+          <div class="status">
+            🖼️ Image search is coming soon.
+          </div>
+        `;
+
+      } else if (mode === "news") {
+
+        input.placeholder = "Search for news...";
+        button.textContent = "Search";
+
+        results.innerHTML = `
+          <div class="status">
+            📰 News search is coming soon.
+          </div>
+        `;
+
+      } else if (mode === "videos") {
+
+        input.placeholder = "Search for videos...";
+        button.textContent = "Search";
+
+        results.innerHTML = `
+          <div class="status">
+            🎥 Video search is coming soon.
+          </div>
+        `;
+
+      } else {
+
+        input.placeholder = "Search or ask anything...";
+        button.textContent = "Search";
+
+        results.innerHTML = `
+          <div class="status">
+            Search Factsack to get started.
+          </div>
+        `;
+
+      }
+
+    }
+
+
+    function quickSearch(text) {
+      input.value = text;
+      search();
+    }
+
+
+    async function search() {
+
+      const query = input.value.trim();
+
+      if (!query) {
+        return;
+      }
+
+
+      if (currentMode === "ai") {
+        aiMode(query);
+        return;
+      }
+
+
+      if (currentMode !== "all") {
+
+        results.innerHTML = `
+          <div class="result">
+            <h2>${query}</h2>
+            <p>
+              This Factsack feature is still being built.
+            </p>
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      results.innerHTML = `
+        <div class="status">
+          🔎 Searching Factsack...
+        </div>
+      `;
+
+
+      try {
+
+        const url =
+          "https://en.wikipedia.org/w/api.php" +
+          "?action=query" +
+          "&generator=search" +
+          "&gsrsearch=" + encodeURIComponent(query) +
+          "&gsrnamespace=0" +
+          "&gsrlimit=8" +
+          "&prop=extracts|info" +
+          "&exintro=true" +
+          "&explaintext=true" +
+          "&inprop=url" +
+          "&format=json" +
+          "&origin=*";
+
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+
+        if (!data.query || !data.query.pages) {
+
+          results.innerHTML = `
+            <div class="result">
+              <h2>No results found</h2>
+              <p>Factsack couldn't find information about "${escapeHTML(query)}".</p>
+            </div>
+          `;
+
+          return;
+
+        }
+
+
+        const pages = Object.values(data.query.pages);
+
+        results.innerHTML = "";
+
+
+        pages.forEach(page => {
+
+          let text =
+            page.extract ||
+            "No description available.";
+
+
+          if (text.length > 500) {
+            text = text.substring(0, 500) + "...";
+          }
+
+
+          const card = document.createElement("div");
+
+          card.className = "result";
+
+          card.innerHTML = `
+            <h2>${escapeHTML(page.title)}</h2>
+            <p>${escapeHTML(text)}</p>
+            <a
+              class="source"
+              href="${page.fullurl || '#'}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Read source ↗
+            </a>
+          `;
+
+          results.appendChild(card);
+
+        });
+
+
+      } catch (error) {
+
+        results.innerHTML = `
+          <div class="result">
+            <h2>Search unavailable</h2>
+            <p>
+              Factsack couldn't connect to the search
+              service right now.
+            </p>
+          </div>
+        `;
+
+      }
+
+    }
+
+
+    function aiMode(query) {
+
+      results.innerHTML = `
+
+        <div class="result user-question">
+          <h2>You</h2>
+          <p>${escapeHTML(query)}</p>
+        </div>
+
+        <div class="result ai-answer">
+          <h2>🤖 Factsack AI</h2>
+          <p id="aiText">
+            Thinking...
+          </p>
+        </div>
+
+      `;
+
+
+      setTimeout(function() {
+
+        let answer =
+          "I'm currently the demo version of Factsack AI. " +
+          "I received your question: \"" +
+          query +
+          "\". A real AI connection will allow me to give you a detailed answer.";
+
+        document.getElementById("aiText").textContent = answer;
+
+      }, 700);
+
+    }
+
+
+    function escapeHTML(text) {
+
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+  </script>
+
+</body>
+</html>
