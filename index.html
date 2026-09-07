@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Factsack</title>
+
+<style>
+
+/* =========================
+   BASIC
+========================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #090e16;
+  color: #ffffff;
+  min-height: 100vh;
+}
+
+
+/* =========================
+   TOP LOGO
+========================= */
+
+.topbar {
+  padding: 25px;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.main {
+  max-width: 950px;
+  margin: auto;
+  padding: 30px 20px 80px;
+  text-align: center;
+}
+
+.crown {
+  font-size: 65px;
+  margin-top: 20px;
+}
+
+.main h1 {
+  font-size: 55px;
+  margin-top: 10px;
+}
+
+.description {
+  font-size: 22px;
+  color: #9aa4b5;
+  margin-top: 12px;
+}
+
+
+/* =========================
+   SEARCH BAR
+========================= */
+
+.search-container {
+  margin: 45px auto 0;
+  max-width: 750px;
+}
+
+.search-box {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: #121925;
+  border: 1px solid #2a3545;
+  border-radius: 18px;
+  padding: 8px;
+}
+
+.search-icon {
+  font-size: 22px;
+  padding-left: 12px;
+}
+
+#searchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 15px;
+  font-size: 18px;
+  min-width: 0;
+}
+
+#searchInput::placeholder {
+  color: #7f8999;
+}
+
+#searchButton {
+  background: #6577ff;
+  color: white;
+  border: none;
+  border-radius: 13px;
+  padding: 15px 23px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#searchButton:hover {
+  opacity: 0.85;
+}
+
+
+/* =========================
+   TABS
+========================= */
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.tab {
+  background: #121925;
+  border: 1px solid #283344;
+  color: #b7c0cf;
+  padding: 14px 22px;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.tab:hover {
+  background: #1a2433;
+}
+
+.tab.active {
+  background: #1c2540;
+  border-color: #6577ff;
+  color: white;
+}
+
+
+/* =========================
+   SUGGESTIONS
+========================= */
+
+.suggestions {
+  margin-top: 30px;
+}
+
+.try-text {
+  color: #7f8999;
+  margin-bottom: 15px;
+  font-size: 17px;
+}
+
+.suggestion-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.suggestion {
+  background: #101722;
+  border: 1px solid #283344;
+  color: #bfc8d5;
+  padding: 12px 18px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.suggestion:hover {
+  background: #1a2433;
+}
+
+
+/* =========================
+   RESULTS
+========================= */
+
+#results {
+  max-width: 850px;
+  margin: 40px auto;
+  text-align: left;
+}
+
+.status {
+  text-align: center;
+  color: #8d98a8;
+  padding: 30px;
+}
+
+.result {
+  background: #121925;
+  border: 1px solid #293545;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 18px;
+}
+
+.result h2 {
+  margin-bottom: 12px;
+  font-size: 22px;
+}
+
+.result p {
+  color: #c5cbd5;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.user-question {
+  background: #202a42;
+  border-color: #46547d;
+}
+
+.ai-answer {
+  background: #141b27;
+}
+
+.ai-answer h2 {
+  color: #aeb9ff;
+}
+
+.source {
+  display: inline-block;
+  margin-top: 15px;
+  color: #8d9aff;
+  text-decoration: none;
+}
+
+.source:hover {
+  text-decoration: underline;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+  .topbar {
+    font-size: 25px;
+    padding: 20px;
+  }
+
+  .main {
+    padding: 15px;
+  }
+
+  .crown {
+    font-size: 55px;
+  }
+
+  .main h1 {
+    font-size: 45px;
+  }
+
+  .description {
+    font-size: 18px;
+  }
+
+  .search-container {
+    margin-top: 35px;
+  }
+
+  #searchInput {
+    font-size: 16px;
+    padding: 13px 8px;
+  }
+
+  #searchButton {
+    padding: 13px 15px;
+  }
+
+  .tab {
+    padding: 12px 16px;
+    font-size: 15px;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     TOP BAR
+========================= -->
+
+<div class="topbar">
+
+  <div class="logo">
+    👑 Factsack
+  </div>
+
+</div>
+
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="main">
+
+  <div class="crown">
+    👑
+  </div>
+
+
+  <h1>
+    Factsack
+  </h1>
+
+
+  <p class="description">
+    Search. Ask. Discover.
+  </p>
+
+
+
+  <!-- SEARCH BAR -->
+
+  <div class="search-container">
+
+    <div class="search-box">
+
+      <div class="search-icon">
+        🔍
+      </div>
+
+
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search or ask anything..."
+        autocomplete="off"
+      >
+
+
+      <button
+        id="searchButton"
+        onclick="searchFactsack()"
+      >
+        Search
+      </button>
+
+
+    </div>
+
+  </div>
+
+
+
+  <!-- TABS -->
+
+  <div class="tabs">
+
+
+    <button
+      class="tab active"
+      onclick="selectMode('all', this)"
+    >
+      🔎 All
+    </button>
+
+
+    <button
+      class="tab"
+      onclick="selectMode('ai', this)"
+    >
+      🤖 AI Mode
+    </button>
+
+
+    <button
+      class="tab"
+      onclick="selectMode('images', this)"
+    >
+      🖼️ Images
+    </button>
+
+
+    <button
+      class="tab"
+      onclick="selectMode('news', this)"
+    >
+      📰 News
+    </button>
+
+
+    <button
+      class="tab"
+      onclick="selectMode('videos', this)"
+    >
+      🎥 Videos
+    </button>
+
+
+  </div>
+
+
+
+  <!-- SUGGESTIONS -->
+
+  <div
+    class="suggestions"
+    id="suggestions"
+  >
+
+    <div class="try-text">
+      Try asking:
+    </div>
+
+
+    <div class="suggestion-buttons">
+
+
+      <button
+        class="suggestion"
+        onclick="quickSearch('What is Ghana?')"
+      >
+        What is Ghana?
+      </button>
+
+
+      <button
+        class="suggestion"
+        onclick="quickSearch('How does the internet work?')"
+      >
+        How does the internet work?
+      </button>
+
+
+      <button
+        class="suggestion"
+        onclick="quickSearch('Solar system')"
+      >
+        Solar system
+      </button>
+
+
+      <button
+        class="suggestion"
+        onclick="quickSearch('Hi')"
+      >
+        Say Hi 👋
+      </button>
+
+
+    </div>
+
+  </div>
+
+
+
+  <!-- RESULTS -->
+
+  <div id="results">
+
+    <div class="status">
+      Search Factsack to get started.
+    </div>
+
+  </div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =========================
+   VARIABLES
+========================= */
+
+const input =
+  document.getElementById("searchInput");
+
+const results =
+  document.getElementById("results");
+
+const button =
+  document.getElementById("searchButton");
+
+const suggestions =
+  document.getElementById("suggestions");
+
+let currentMode = "all";
+
+
+
+/* =========================
+   ENTER KEY
+========================= */
+
+input.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (event.key === "Enter") {
+
+      searchFactsack();
+
+    }
+
+  }
+);
+
+
+
+/* =========================
+   SELECT MODE
+========================= */
+
+function selectMode(mode, element) {
+
+
+  currentMode = mode;
+
+
+  document
+    .querySelectorAll(".tab")
+    .forEach(function(tab) {
+
+      tab.classList.remove("active");
+
+    });
+
+
+  element.classList.add("active");
+
+
+  if (mode === "all") {
+
+
+    input.placeholder =
+      "Search or ask anything...";
+
+
+    button.textContent =
+      "Search";
+
+
+    suggestions.style.display =
+      "block";
+
+
+    results.innerHTML = `
+
+      <div class="status">
+        Search Factsack to get started.
+      </div>
+
+    `;
+
+
+  }
+
+
+  else if (mode === "ai") {
+
+
+    input.placeholder =
+      "Ask Factsack AI anything...";
+
+
+    button.textContent =
+      "Ask";
+
+
+    suggestions.style.display =
+      "block";
+
+
+    results.innerHTML = `
+
+      <div class="result ai-answer">
+
+        <h2>
+          🤖 Factsack AI
+        </h2>
+
+        <p>
+          Hey! 👋 What's up? You can chat with me or ask me any question.
+        </p>
+
+      </div>
+
+    `;
+
+
+  }
+
+
+  else if (mode === "images") {
+
+
+    input.placeholder =
+      "Search for images...";
+
+
+    button.textContent =
+      "Search";
+
+
+    suggestions.style.display =
+      "none";
+
+
+    results.innerHTML = `
+
+      <div class="status">
+        🖼️ Search for an image using the search bar.
+      </div>
+
+    `;
+
+
+  }
+
+
+  else if (mode === "news") {
+
+
+    input.placeholder =
+      "Search for news...";
+
+
+    button.textContent =
+      "Search";
+
+
+    suggestions.style.display =
+      "none";
+
+
+    results.innerHTML = `
+
+      <div class="status">
+        📰 Search for news using the search bar.
+      </div>
+
+    `;
+
+
+  }
+
+
+  else if (mode === "videos") {
+
+
+    input.placeholder =
+      "Search for videos...";
+
+
+    button.textContent =
+      "Search";
+
+
+    suggestions.style.display =
+      "none";
+
+
+    results.innerHTML = `
+
+      <div class="status">
+        🎥 Search for videos using the search bar.
+      </div>
+
+    `;
+
+
+  }
+
+
+}
+
+
+
+/* =========================
+   QUICK SEARCH
+========================= */
+
+function quickSearch(query) {
+
+
+  input.value =
+    query;
+
+
+  if (
+    query.toLowerCase() === "hi"
+  ) {
+
+    currentMode = "ai";
+
+
+    document
+      .querySelectorAll(".tab")
+      .forEach(function(tab) {
+
+        tab.classList.remove("active");
+
+      });
+
+
+    document
+      .querySelectorAll(".tab")[1]
+      .classList.add("active");
+
+
+  }
+
+
+  searchFactsack();
+
+
+}
+
+
+
+/* =========================
+   MAIN SEARCH
+========================= */
+
+function searchFactsack() {
+
+
+  const query =
+    input.value.trim();
+
+
+  if (!query) {
+
+    return;
+
+  }
+
+
+  suggestions.style.display =
+    "none";
+
+
+  if (currentMode === "ai") {
+
+    aiMode(query);
+
+    input.value = "";
+
+  }
+
+
+  else if (currentMode === "all") {
+
+    normalSearch(query);
+
+  }
+
+
+  else if (currentMode === "images") {
+
+    imageSearch(query);
+
+  }
+
+
+  else if (currentMode === "news") {
+
+    newsSearch(query);
+
+  }
+
+
+  else if (currentMode === "videos") {
+
+    videoSearch(query);
+
+  }
+
+
+}
+
+
+
+/* =========================
+   AI MODE
+========================= */
+
+async function aiMode(query) {
+
+
+  results.innerHTML = `
+
+    <div class="result user-question">
+
+      <h2>
+        You
+      </h2>
+
+      <p>
+        ${escapeHTML(query)}
+      </p>
+
+    </div>
+
+
+    <div class="result ai-answer">
+
+      <h2>
+        🤖 Factsack AI
+      </h2>
+
+      <p id="aiText">
+        Thinking...
+      </p>
+
+    </div>
+
+  `;
+
+
+  const aiText =
+    document.getElementById("aiText");
+
+
+  const question =
+    query.toLowerCase().trim();
+
+
+
+  /* HI */
+
+  if (
+
+    question === "hi" ||
+
+    question === "hello" ||
+
+    question === "hey" ||
+
+    question === "yo"
+
+  ) {
+
+
+    aiText.textContent =
+      "Hey! 👋 What's up? I'm Factsack AI. How are you doing?";
+
+
+    return;
+
+  }
+
+
+
+  /* HOW ARE YOU */
+
+  if (
+
+    question === "how are you" ||
+
+    question === "how r u" ||
+
+    question === "hw r u" ||
+
+    question === "how are u" ||
+
+    question === "hw are u"
+
+  ) {
+
+
+    aiText.textContent =
+      "I'm doing great! 😄 Thanks for asking. How are you doing today?";
+
+
+    return;
+
+  }
+
+
+
+  /* WHATS UP */
+
+  if (
+
+    question === "wsp" ||
+
+    question === "wassup" ||
+
+    question === "what's up" ||
+
+    question === "whats up"
+
+  ) {
+
+
+    aiText.textContent =
+      "Not much 😄 I'm just here, ready to chat and help you with anything. What's up with you?";
+
+
+    return;
+
+  }
+
+
+
+  /* IM GOOD */
+
+  if (
+
+    question === "i'm good" ||
+
+    question === "im good" ||
+
+    question === "i am good" ||
+
+    question === "good"
+
+  ) {
+
+
+    aiText.textContent =
+      "That's great to hear! 😄 What are you up to today?";
+
+
+    return;
+
+  }
+
+
+
+  /* FOOD */
+
+  if (
+
+    question.includes("what should i eat") ||
+
+    question.includes("what can i eat") ||
+
+    question.includes("what do you prefer for me to eat") ||
+
+    question.includes("what should i eat today")
+
+  ) {
+
+
+    aiText.textContent =
+      "Hmm 😋 How about waakye, jollof rice, fried rice, or rice and chicken? It depends on what you're in the mood for! Do you want something spicy, light, or filling?";
+
+
+    return;
+
+  }
+
+
+
+  /* BORED */
+
+  if (
+
+    question.includes("i'm bored") ||
+
+    question.includes("im bored") ||
+
+    question === "bored"
+
+  ) {
+
+
+    aiText.textContent =
+      "😂 Let's fix that! We can play a quiz, create something cool for Factsack, talk about games or movies, or you can challenge me with a difficult question. What sounds fun?";
+
+
+    return;
+
+  }
+
+
+
+  /* CREATOR */
+
+  if (
+
+    question.includes("who created you") ||
+
+    question.includes("who made you") ||
+
+    question.includes("who created u") ||
+
+    question.includes("who made u") ||
+
+    question.includes("your creator")
+
+  ) {
+
+
+    aiText.textContent =
+      "I was created by Desmond Nana Osei, a JHS graduate and developer. 👑";
+
+
+    return;
+
+  }
+
+
+
+  /* NAME */
+
+  if (
+
+    question.includes("what is your name") ||
+
+    question.includes("what's your name") ||
+
+    question === "who are you"
+
+  ) {
+
+
+    aiText.textContent =
+      "I'm Factsack AI 🤖! I'm part of the Factsack search engine. You can chat with me, ask questions, or search for information.";
+
+
+    return;
+
+  }
+
+
+
+  /* THANKS */
+
+  if (
+
+    question === "thanks" ||
+
+    question === "thank you" ||
+
+    question === "tnx" ||
+
+    question === "thx"
+
+  ) {
+
+
+    aiText.textContent =
+      "You're welcome! 😄👋 Anytime!";
+
+
+    return;
+
+  }
+
+
+
+  /* BYE */
+
+  if (
+
+    question === "bye" ||
+
+    question === "goodbye" ||
+
+    question === "see you"
+
+  ) {
+
+
+    aiText.textContent =
+      "Bye! 👋 Take care and come back anytime you need Factsack!";
+
+
+    return;
+
+  }
+
+
+
+  /* WHAT ARE YOU DOING */
+
+  if (
+
+    question.includes("what are you doing") ||
+
+    question.includes("wat are u doing") ||
+
+    question.includes("what r u doing")
+
+  ) {
+
+
+    aiText.textContent =
+      "Right now? 😄 I'm just here waiting to chat with you and answer your questions!";
+
+
+    return;
+
+  }
+
+
+
+  /* WIKIPEDIA ANSWERS */
+
+  try {
+
+
+    aiText.textContent =
+      "Finding your answer...";
+
+
+    const searchURL =
+
+      "https://en.wikipedia.org/w/api.php" +
+
+      "?action=query" +
+
+      "&list=search" +
+
+      "&srsearch=" +
+
+      encodeURIComponent(query) +
+
+      "&srlimit=1" +
+
+      "&format=json" +
+
+      "&origin=*";
+
+
+    const response =
+      await fetch(searchURL);
+
+
+    const data =
+      await response.json();
+
+
+
+    if (
+
+      !data.query ||
+
+      !data.query.search ||
+
+      data.query.search.length === 0
+
+    ) {
+
+
+      aiText.textContent =
+        "Hmm, I couldn't find a direct answer for that. Try asking me another way 😄";
+
+
+      return;
+
+    }
+
+
+
+    const title =
+      data.query.search[0].title;
+
+
+
+    const summaryURL =
+
+      "https://en.wikipedia.org/api/rest_v1/page/summary/" +
+
+      encodeURIComponent(title);
+
+
+
+    const summaryResponse =
+      await fetch(summaryURL);
+
+
+    const summaryData =
+      await summaryResponse.json();
+
+
+
+    if (summaryData.extract) {
+
+
+      aiText.textContent =
+        summaryData.extract;
+
+
+    }
+
+
+    else {
+
+
+      aiText.textContent =
+        "Sorry, I couldn't find a clear answer.";
+
+
+    }
+
+
+  }
+
+
+  catch (error) {
+
+
+    aiText.textContent =
+      "Hmm, I couldn't find an answer right now. Please check your internet connection and try again.";
+
+
+  }
+
+
+}
+
+
+
+/* =========================
+   NORMAL SEARCH
+========================= */
+
+async function normalSearch(query) {
+
+
+  results.innerHTML = `
+
+    <div class="status">
+      🔎 Searching Factsack...
+    </div>
+
+  `;
+
+
+  try {
+
+
+    const url =
+
+      "https://en.wikipedia.org/w/api.php" +
+
+      "?action=query" +
+
+      "&generator=search" +
+
+      "&gsrsearch=" +
+
+      encodeURIComponent(query) +
+
+      "&gsrnamespace=0" +
+
+      "&gsrlimit=8" +
+
+      "&prop=extracts|info" +
+
+      "&exintro=true" +
+
+      "&explaintext=true" +
+
+      "&inprop=url" +
+
+      "&format=json" +
+
+      "&origin=*";
+
+
+    const response =
+      await fetch(url);
+
+
+    const data =
+      await response.json();
+
+
+
+    if (
+
+      !data.query ||
+
+      !data.query.pages
+
+    ) {
+
+
+      results.innerHTML = `
+
+        <div class="status">
+          No results found.
+        </div>
+
+      `;
+
+
+      return;
+
+    }
+
+
+
+    const pages =
+      Object.values(data.query.pages);
+
+
+    results.innerHTML = "";
+
+
+
+    pages.forEach(function(page) {
+
+
+      const card =
+        document.createElement("div");
+
+
+      card.className =
+        "result";
+
+
+      let text =
+
+        page.extract ||
+
+        "No description available.";
+
+
+
+      if (text.length > 400) {
+
+        text =
+          text.substring(0, 400) + "...";
+
+      }
+
+
+
+      card.innerHTML = `
+
+        <h2>
+          ${escapeHTML(page.title)}
+        </h2>
+
+        <p>
+          ${escapeHTML(text)}
+        </p>
+
+        <a
+          class="source"
+          href="${page.fullurl}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Read more ↗
+        </a>
+
+      `;
+
+
+      results.appendChild(card);
+
+
+    });
+
+
+  }
+
+
+  catch (error) {
+
+
+    results.innerHTML = `
+
+      <div class="status">
+        Search unavailable. Please try again.
+      </div>
+
+    `;
+
+
+  }
+
+
+}
+
+
+
+/* =========================
+   IMAGE SEARCH
+========================= */
+
+function imageSearch(query) {
+
+
+  results.innerHTML = `
+
+    <div class="result">
+
+      <h2>
+        🖼️ Image Search
+      </h2>
+
+      <p>
+        Search for "${escapeHTML(query)}" on Google Images.
+      </p>
+
+      <a
+        class="source"
+        href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        View Images ↗
+      </a>
+
+    </div>
+
+  `;
+
+
+}
+
+
+
+/* =========================
+   NEWS SEARCH
+========================= */
+
+function newsSearch(query) {
+
+
+  results.innerHTML = `
+
+    <div class="result">
+
+      <h2>
+        📰 News Search
+      </h2>
+
+      <p>
+        Search the latest news about "${escapeHTML(query)}".
+      </p>
+
+      <a
+        class="source"
+        href="https://news.google.com/search?q=${encodeURIComponent(query)}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        View News ↗
+      </a>
+
+    </div>
+
+  `;
+
+
+}
+
+
+
+/* =========================
+   VIDEO SEARCH
+========================= */
+
+function videoSearch(query) {
+
+
+  results.innerHTML = `
+
+    <div class="result">
+
+      <h2>
+        🎥 Video Search
+      </h2>
+
+      <p>
+        Search for videos about "${escapeHTML(query)}".
+      </p>
+
+      <a
+        class="source"
+        href="https://www.youtube.com/results?search_query=${encodeURIComponent(query)}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        View Videos ↗
+      </a>
+
+    </div>
+
+  `;
+
+
+}
+
+
+
+/* =========================
+   SECURITY
+========================= */
+
+function escapeHTML(text) {
+
+
+  return text
+
+    .replace(/&/g, "&amp;")
+
+    .replace(/</g, "&lt;")
+
+    .replace(/>/g, "&gt;")
+
+    .replace(/"/g, "&quot;")
+
+    .replace(/'/g, "&#039;");
+
+
+}
+
+
+</script>
+
+
+</body>
+</html>
