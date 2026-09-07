@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Factsack</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #ffffff;
+  color: #222;
+}
+
+/* HEADER */
+header {
+  text-align: center;
+  padding: 50px 20px 20px;
+}
+
+/* LOGO */
+.logo {
+  position: relative;
+  display: inline-block;
+  font-size: 55px;
+  font-weight: bold;
+  color: #4285f4;
+}
+
+.crown {
+  position: absolute;
+  top: -38px;
+  left: 5px;
+  font-size: 32px;
+}
+
+/* SUBTITLE */
+.subtitle {
+  color: #666;
+  font-size: 17px;
+  margin-top: 15px;
+}
+
+/* MAIN */
+main {
+  width: 100%;
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+/* SEARCH BAR */
+.search-box {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border: 2px solid #4285f4;
+  border-radius: 30px;
+  overflow: hidden;
+  background: white;
+  min-height: 58px;
+}
+
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  padding: 18px;
+  font-size: 17px;
+  background: transparent;
+}
+
+.search-btn {
+  height: 58px;
+  border: none;
+  background: #4285f4;
+  color: white;
+  padding: 0 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* QUICK BUTTONS */
+.quick-searches {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.quick-searches button {
+  padding: 10px 15px;
+  margin: 5px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background: white;
+  cursor: pointer;
+}
+
+/* ANSWER BOX */
+#answer {
+  margin-top: 35px;
+}
+
+.answer-box {
+  background: #f5f8ff;
+  border: 1px solid #d8e4ff;
+  border-radius: 15px;
+  padding: 25px;
+}
+
+.answer-box h2 {
+  margin-top: 0;
+  color: #4285f4;
+}
+
+.answer-box p {
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.loading {
+  text-align: center;
+  padding: 30px;
+  font-size: 17px;
+}
+
+.error {
+  text-align: center;
+  padding: 30px;
+  color: #d93025;
+}
+
+footer {
+  text-align: center;
+  color: #888;
+  padding: 40px 20px;
+}
+
+/* PHONE */
+@media (max-width: 500px) {
+
+  .logo {
+    font-size: 45px;
+  }
+
+  .search-box {
+    min-height: 55px;
+  }
+
+  .search-box input {
+    padding: 15px;
+    font-size: 15px;
+  }
+
+  .search-btn {
+    height: 55px;
+    padding: 0 18px;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="logo">
+    <span class="crown">👑</span>F
+  </div>
+
+  <div class="subtitle">
+    Factsack — Search. Discover. Learn.
+  </div>
+
+</header>
+
+
+<main>
+
+  <!-- SEARCH BAR -->
+  <div class="search-box">
+
+    <input
+      id="searchInput"
+      type="text"
+      placeholder="Search anything..."
+    >
+
+    <button
+      class="search-btn"
+      onclick="searchFactsack()"
+    >
+      Search
+    </button>
+
+  </div>
+
+
+  <!-- QUICK SEARCHES -->
+  <div class="quick-searches">
+
+    <button onclick="quickSearch('Ghana')">
+      🇬🇭 Ghana
+    </button>
+
+    <button onclick="quickSearch('Science')">
+      🔬 Science
+    </button>
+
+    <button onclick="quickSearch('Space')">
+      🚀 Space
+    </button>
+
+    <button onclick="quickSearch('ChatGPT')">
+      🤖 ChatGPT
+    </button>
+
+  </div>
+
+
+  <!-- ANSWER -->
+  <div id="answer"></div>
+
+</main>
+
+
+<footer>
+  Factsack © 2026
+</footer>
+
+
+<script>
+
+/* PRESS ENTER TO SEARCH */
+
+document
+.getElementById("searchInput")
+.addEventListener("keydown", function(event) {
+
+  if (event.key === "Enter") {
+    searchFactsack();
+  }
+
+});
+
+
+/* SEARCH */
+
+async function searchFactsack() {
+
+  const input =
+    document.getElementById("searchInput");
+
+  const query =
+    input.value.trim();
+
+  const answer =
+    document.getElementById("answer");
+
+
+  if (!query) {
+
+    answer.innerHTML = `
+      <div class="error">
+        Please type something to search.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  answer.innerHTML = `
+    <div class="loading">
+      🔎 Searching...
+    </div>
+  `;
+
+
+  try {
+
+    /* WIKIPEDIA SEARCH */
+
+    const searchURL =
+      "https://en.wikipedia.org/w/api.php" +
+      "?action=query" +
+      "&list=search" +
+      "&srsearch=" +
+      encodeURIComponent(query) +
+      "&format=json" +
+      "&origin=*";
+
+
+    const response =
+      await fetch(searchURL);
+
+
+    const data =
+      await response.json();
+
+
+    if (!data.query.search.length) {
+
+      throw new Error("No results");
+
+    }
+
+
+    const title =
+      data.query.search[0].title;
+
+
+    /* GET DIRECT SUMMARY */
+
+    const summaryURL =
+      "https://en.wikipedia.org/api/rest_v1/page/summary/" +
+      encodeURIComponent(title);
+
+
+    const summaryResponse =
+      await fetch(summaryURL);
+
+
+    const summary =
+      await summaryResponse.json();
+
+
+    const text =
+      summary.extract ||
+      "No direct answer found.";
+
+
+    answer.innerHTML = `
+
+      <div class="answer-box">
+
+        <h2>
+          ${escapeHTML(title)}
+        </h2>
+
+        <p>
+          ${escapeHTML(text)}
+        </p>
+
+      </div>
+
+    `;
+
+
+  } catch (error) {
+
+    answer.innerHTML = `
+
+      <div class="error">
+
+        ❌ Sorry, I couldn't find an answer.
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* QUICK SEARCH */
+
+function quickSearch(query) {
+
+  document
+  .getElementById("searchInput")
+  .value = query;
+
+  searchFactsack();
+
+}
+
+
+/* SAFE TEXT */
+
+function escapeHTML(text) {
+
+  const div =
+    document.createElement("div");
+
+  div.textContent = text;
+
+  return div.innerHTML;
+
+}
+
+</script>
+
+</body>
+</html>
